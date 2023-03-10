@@ -1,30 +1,50 @@
-const numbers = [];
-let currentValue = "";
-let sum = 0;
-const digits = document.querySelectorAll(".btn.number");
-let addBtn = document.querySelector(".add").addEventListener("click", add);
-let example = document.getElementById("display");
+const display = document.querySelector("#display");
+const buttons = document.querySelectorAll("button");
 
-digits.forEach((digit) => {
-  digit.addEventListener("click", function () {
-    currentValue += digit.textContent;
-    example.textContent = currentValue.substring(1);
-    console.log(currentValue);
+const numbers = [];
+let total = 0;
+let currentValue = "";
+let screen = document.getElementById("display");
+screen.textContent = total;
+
+let addBtn = document.getElementById("+").addEventListener("click", add);
+let clearBtn = document
+  .getElementById("clear")
+  .addEventListener("click", remove);
+
+function init() {
+  digits();
+}
+
+function digits() {
+  const nums = document.querySelectorAll(".btn.number");
+
+  nums.forEach((num) => {
+    num.addEventListener("click", function () {
+      if ((total = 0 || currentValue === "")) {
+        screen.textContent = currentValue += num.id;
+      } else {
+        screen.textContent = currentValue += num.id;
+      }
+    });
   });
-});
+}
 
 function add() {
-  numbers.push(parseInt(currentValue));
-  currentValue = 0;
-  sum = numbers.reduce((total, current) => {
+  numbers.push(parseInt(screen.textContent));
+  currentValue = "";
+  console.log(numbers);
+  total = numbers.reduce((total, current) => {
     return total + current;
   }, 0);
-  example.textContent = sum;
+  screen.textContent = total;
 }
 
 function remove() {
-  currentValue = 0;
-  sum = 0;
-  example.textContent = currentValue;
+  currentValue = "";
+  total = 0;
+  screen.textContent = total;
   numbers.length = 0;
 }
+
+init();
