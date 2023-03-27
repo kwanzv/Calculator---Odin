@@ -1,50 +1,88 @@
 const display = document.querySelector("#display");
-const buttons = document.querySelectorAll("button");
 
-const numbers = [];
-let total = 0;
+let defaultValue = 0;
+let finalValue = 0;
 let currentValue = "";
+let operationValue = "";
 let screen = document.getElementById("display");
-screen.textContent = total;
 
-let addBtn = document.getElementById("+").addEventListener("click", add);
 let clearBtn = document
   .getElementById("clear")
-  .addEventListener("click", remove);
+  .addEventListener("click", clear);
 
-function init() {
-  digits();
+function clear() {
+  currentValue = "";
+  finalValue = 0;
+  screen.textContent = defaultValue;
+  operationValue = "";
 }
 
-function digits() {
-  const nums = document.querySelectorAll(".btn.number");
+function update() {
+  screen.textContent = 0;
+  currentValue = "";
+}
 
-  nums.forEach((num) => {
-    num.addEventListener("click", function () {
-      if ((total = 0 || currentValue === "")) {
-        screen.textContent = currentValue += num.id;
-      } else {
-        screen.textContent = currentValue += num.id;
+function init() {
+  checkBtn();
+  update();
+}
+
+function calc(id) {
+  switch (id) {
+    case "+":
+      finalValue += parseInt(currentValue);
+      console.log(finalValue);
+      currentValue = "";
+      screen.textContent = finalValue;
+      break;
+    case "-":
+      finalValue -= parseInt(currentValue);
+      console.log(finalValue);
+      currentValue = "";
+      screen.textContent = finalValue;
+      break;
+    case "*":
+      finalValue *= parseInt(currentValue);
+      console.log(finalValue);
+      currentValue = "";
+      screen.textContent = finalValue;
+      break;
+    case "=":
+      break;
+    case "%":
+      finalValue = parseInt(currentValue);
+      console.log(finalValue);
+      currentValue = "";
+      screen.textContent = finalValue;
+      break;
+  }
+}
+
+function checkBtn() {
+  const btnNums = document.querySelectorAll(".btn-number");
+  const operators = document.querySelectorAll(".btn-operator");
+
+  btnNums.forEach((btn) => {
+    btn.addEventListener("click", (event) => checkDigits(event.target.id));
+  });
+
+  operators.forEach((operator) => {
+    operator.addEventListener("click", (event) => {
+      if (finalValue === 0) {
+        finalValue += parseInt(currentValue);
+        update();
+        console.log(finalValue);
+      } else if (finalValue > 0) {
+        calc(event.target.id);
       }
     });
   });
-}
 
-function add() {
-  numbers.push(parseInt(screen.textContent));
-  currentValue = "";
-  console.log(numbers);
-  total = numbers.reduce((total, current) => {
-    return total + current;
-  }, 0);
-  screen.textContent = total;
-}
-
-function remove() {
-  currentValue = "";
-  total = 0;
-  screen.textContent = total;
-  numbers.length = 0;
+  function checkDigits(id) {
+    currentValue += id;
+    screen.textContent = currentValue;
+    console.log(currentValue);
+  }
 }
 
 init();
